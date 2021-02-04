@@ -13,7 +13,7 @@
 # This is not a production ready script, but a proof of
 # capabilities quickly thrown together.
 #
- 
+
 import json
 import requests
 import sys
@@ -44,6 +44,7 @@ def read_csv_file(csv_file_name):
             site_list.append({'network': row['Network'],'site-id' :row['Site-id']})
     return site_list #Returned site_list dictionary
 
+#Function to extract specific info out of device stats info set
 def get_device_stat_info(device_stat_info,type):
     if isinstance(device_stat_info[type],str):
         return_text = device_stat_info[type]
@@ -51,7 +52,7 @@ def get_device_stat_info(device_stat_info,type):
         return_text = "Error, no info"
     return return_text
 
-# Function to get stat info per switch
+# Function to get stat info for a switch switch
 def get_switch_stat_info(mist_url,headers,site_id,device_id):
     api_url = '{0}sites/{1}/stats/devices?type=switch'.format(mist_url,site_id)
     #print(api_url)
@@ -67,6 +68,7 @@ def get_switch_stat_info(mist_url,headers,site_id,device_id):
         print("Error Fetching switch stat")
     return return_bol,device_stat_info
 
+#Script for finding all connected switches at a site
 def check_site_for_connected_switches(mist_url,headers,site_id):
     api_url = '{}sites/{}/stats/devices?type=switch'.format(mist_url,site_id)
     #print(api_url)
@@ -90,6 +92,7 @@ def find_new_site_from_ip(site_list,ip_address):
             site_id = site['site-id']
     return site_id
 
+#Script to move connected switch from a site to another
 def move_device_to_new_site(mist_url,headers,old_site_id,device_id,new_site_id):
     [tmp,device_stat_info] = get_switch_stat_info(mist_url,headers,old_site_id,device_id)
     org_id =  get_device_stat_info(device_stat_info,'org_id')

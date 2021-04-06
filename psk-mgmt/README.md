@@ -35,3 +35,15 @@ Example for deleting pre-shared key:
 ./psk-mgmt.py delete 18bf02e3-0000-0000-0000-7a5284471c4f test1
 Sucessfully deleted PSK test1 at site "Osloveien 1"
 ```
+
+Example for showing pre-shared key:
+
+```
+./psk-mgmt.py show 18bf02e3-0000-0000-0000-7a5284471c4f rom100
+Site name: Osloveien 1
+Site id:   18bf02e3-0000-0000-0000-7a5284471c4f
+Key name:  rom100
+SSID:      skurva-hotell
+Vlan id:   123
+Password:  1234
+```

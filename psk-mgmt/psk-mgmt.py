@@ -12,6 +12,7 @@ containing only the token on a single line.
 
 Usage for adding psk: ./psk-mgmt.py add site_id key_name ssid vlan-id password
 Usage for deleting psk: ./psk-mgmt.py delete site_id key_name
+Usage for showing psk: ./psk-mgmt.py show site_id key_name
 
 Examples:
 ./psk-mgmt.py add 18bf02e3-0000-0000-0000-7a5284471c4f rom100 skurva-hotell 123 1234
@@ -19,6 +20,14 @@ PSK rom100 created at site "Osloveien 1" successfully
 
 ./psk-mgmt.py delete 18bf02e3-0000-0000-0000-7a5284471c4f test1
 Sucessfully deleted PSK test1 at site "Osloveien 1"
+
+./psk-mgmt.py show 18bf02e3-0000-0000-0000-7a5284471c4f rom100
+Site name: Osloveien 1
+Site id:   18bf02e3-0000-0000-0000-7a5284471c4f
+Key name:  rom100
+SSID:      skurva-hotell
+Vlan id:   123
+Password:  1234
 
 This is not a production ready script, but a proof of
 capabilities quickly thrown together.
@@ -139,6 +148,25 @@ def mist_delete_psk(mist_url,headers,site_id,key_name):
         psk = json.loads(response.content.decode('utf-8'))
         print('Sucessfully deleted PSK {} at site "{}"'.format(key_name,site_name))
 
+def mist_show_psk(mist_url,headers,site_id,key_name):
+    '''
+    Function for showing PSK to Mist site
+    '''
+    api_url = '{}sites/{}/psks?name={}'.format(mist_url,site_id,key_name)
+    response = requests.get(api_url, headers=headers)
+    site_name = get_site_name(mist_url,headers,site_id)
+    if response.status_code == 200:
+        psk = json.loads(response.content.decode('utf-8'))
+        print('Site name: {}'.format(site_name))
+        print('Site id:   {}'.format(site_id))
+        print('Key name:  {}'.format(key_name))
+        print('SSID:      {}'.format(psk[0]['ssid']))
+        print('Vlan id:   {}'.format(psk[0]['vlan_id']))
+        print('Password:  {}'.format(psk[0]['passphrase']))
+    else:
+        print('Could not find PSK: {}'.format(key_name))
+
+
 def main():
     '''
     Main function
@@ -162,6 +190,11 @@ def main():
             site_id = sys.argv[2]
             key_name = sys.argv[3]
             mist_delete_psk(mist_url,headers,site_id,key_name)
+        #Reading attributes show site_id key_name
+        elif len(sys.argv) == 3+1 and sys.argv[1] == 'show':
+            site_id = sys.argv[2]
+            key_name = sys.argv[3]
+            mist_show_psk(mist_url,headers,site_id,key_name)
         else:
             print("Wrong action or number of arguments.")
     else:

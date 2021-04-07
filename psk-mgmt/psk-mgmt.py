@@ -31,7 +31,7 @@ Password:  1234
 
 ./psk-mgmt.py update 18bf02e3-0000-0000-0000-7a5284471c4f rom100 test2
 Updated key rom100 with new password
-
+ 
 This is not a production ready script, but a proof of
 capabilities quickly thrown together.
 '''

@@ -51,5 +51,5 @@ Example for updating existing key:
 
 ```
 ./psk-mgmt.py update 18bf02e3-0000-0000-0000-7a5284471c4f rom100 test2
-Updated key rom100 with new password
+Updated key rom100 with new password 
 ```
